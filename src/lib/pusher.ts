@@ -1,0 +1,58 @@
+import PusherServer from "pusher";
+import PusherClient from "pusher-js";
+
+// ──────────────────────────────────────────────
+// Channel & Event Constants
+// ──────────────────────────────────────────────
+
+export const PUSHER_CHANNELS = {
+  INVENTORY: "inventory",
+  WAREHOUSE: (warehouseId: number) => `warehouse-${warehouseId}`,
+  SHELF: (shelfId: number) => `shelf-${shelfId}`,
+} as const;
+
+export const PUSHER_EVENTS = {
+  SHELF_UPDATED: "shelf:updated",
+  PRODUCT_MOVED: "product:moved",
+  STOCK_CHANGED: "stock:changed",
+  SENSOR_DATA: "sensor:data",
+} as const;
+
+// ──────────────────────────────────────────────
+// Server-side Pusher instance (singleton)
+// ──────────────────────────────────────────────
+
+let pusherServerInstance: PusherServer | null = null;
+
+export function getPusherServer(): PusherServer {
+  if (pusherServerInstance) return pusherServerInstance;
+
+  pusherServerInstance = new PusherServer({
+    appId: process.env.PUSHER_APP_ID!,
+    key: process.env.PUSHER_KEY!,
+    secret: process.env.PUSHER_SECRET!,
+    cluster: process.env.PUSHER_CLUSTER!,
+    useTLS: true,
+  });
+
+  return pusherServerInstance;
+}
+
+// ──────────────────────────────────────────────
+// Client-side Pusher instance (singleton)
+// ──────────────────────────────────────────────
+
+let pusherClientInstance: PusherClient | null = null;
+
+export function getPusherClient(): PusherClient {
+  if (pusherClientInstance) return pusherClientInstance;
+
+  pusherClientInstance = new PusherClient(
+    process.env.NEXT_PUBLIC_PUSHER_KEY!,
+    {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+    }
+  );
+
+  return pusherClientInstance;
+}
