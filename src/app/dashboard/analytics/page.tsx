@@ -4,8 +4,47 @@ import { StatsCards } from "@/components/dashboard/analytics/StatsCards";
 import { MainChart } from "@/components/dashboard/analytics/MainChart";
 import { BottomWidgets } from "@/components/dashboard/analytics/BottomWidgets";
 import { SystemLogsPanel } from "@/components/dashboard/analytics/SystemLogsPanel";
+import { db } from "@/db";
 
-export default function AnalyticsDashboardPage() {
+async function getCapacityData() {
+  try {
+    const allZones = await db.query.zones.findMany({
+      with: {
+        racks: {
+          with: {
+            shelves: true,
+          },
+        },
+      },
+    });
+
+    const colors = ["bg-rose-500", "bg-cyan-500", "bg-blue-500"];
+
+    return allZones.map((z, idx) => {
+      let totalCap = 0;
+      let shelfCount = 0;
+      z.racks.forEach((r) =>
+        r.shelves.forEach((s) => {
+          totalCap += s.capacityPercentage;
+          shelfCount++;
+        })
+      );
+      const avgCap = shelfCount === 0 ? 0 : totalCap / shelfCount;
+      return {
+        name: z.name,
+        value: avgCap,
+        color: colors[idx % colors.length],
+      };
+    });
+  } catch (error) {
+    console.error("Failed to fetch capacity data from Neon:", error);
+    return undefined;
+  }
+}
+
+export default async function AnalyticsDashboardPage() {
+  const capacityData = await getCapacityData();
+
   return (
     <div className="flex min-h-screen bg-slate-950 text-slate-200">
       {/* 20% Sidebar */}
@@ -47,7 +86,7 @@ export default function AnalyticsDashboardPage() {
         <div className="flex flex-col gap-6 flex-1">
           <StatsCards />
           <MainChart />
-          <BottomWidgets />
+          <BottomWidgets capacityData={capacityData} />
         </div>
       </main>
 

@@ -8,13 +8,20 @@ const REGIONAL_DATA = [
   { name: "Asia Pacific", value: 10, color: "#475569" }, // Slate
 ];
 
-const CAPACITY_DATA = [
-  { name: "Zone A (Cold Storage)", value: 92, color: "bg-rose-500" },
-  { name: "Zone B (General)", value: 74, color: "bg-cyan-500" },
-  { name: "Zone C (Hazmat)", value: 45, color: "bg-blue-500" },
-];
+interface CapacityData {
+  name: string;
+  value: number;
+  color: string;
+}
 
-export function BottomWidgets() {
+export function BottomWidgets({ capacityData }: { capacityData?: CapacityData[] }) {
+  // Fallback if not provided
+  const data = capacityData || [
+    { name: "Zone A (Cold Storage)", value: 92, color: "bg-rose-500" },
+    { name: "Zone B (General)", value: 74, color: "bg-cyan-500" },
+    { name: "Zone C (Hazmat)", value: 45, color: "bg-blue-500" },
+  ];
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {/* Regional Distribution */}
@@ -75,11 +82,11 @@ export function BottomWidgets() {
         </div>
 
         <div className="flex flex-col gap-5">
-          {CAPACITY_DATA.map((zone) => (
+          {data.map((zone) => (
             <div key={zone.name} className="flex flex-col gap-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-300">{zone.name}</span>
-                <span className="font-mono text-slate-400">{zone.value}%</span>
+                <span className="font-mono text-slate-400">{Math.round(zone.value)}%</span>
               </div>
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
                 <div 
