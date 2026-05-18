@@ -1,5 +1,7 @@
 import { BentoCard } from "@/components/dashboard/BentoCard";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DetailedMetadata } from "@/components/dashboard/widgets/DetailedMetadata";
+import { EnvironmentMetrics } from "@/components/dashboard/widgets/EnvironmentMetrics";
 import { RackOverview } from "@/components/dashboard/widgets/RackOverview";
 import { DASHBOARD_LABELS } from "@/lib/constants";
 
@@ -28,7 +30,9 @@ export default function DashboardPage() {
           <BentoCard
             title={WIDGETS.ENVIRONMENT_METRICS}
             className="col-span-2"
-          />
+          >
+            <EnvironmentMetrics />
+          </BentoCard>
 
           {/* Top SKUs Activity — mid-left single */}
           <BentoCard title={WIDGETS.TOP_SKUS_ACTIVITY} className="col-span-1" />
@@ -37,7 +41,9 @@ export default function DashboardPage() {
           <BentoCard
             title={WIDGETS.DETAILED_METADATA}
             className="col-span-1"
-          />
+          >
+            <DetailedMetadata />
+          </BentoCard>
 
           {/* System Logs — full-width bottom strip */}
           <BentoCard
