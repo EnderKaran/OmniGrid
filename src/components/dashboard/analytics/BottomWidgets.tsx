@@ -30,7 +30,7 @@ export function BottomWidgets({ capacityData }: { capacityData?: CapacityData[] 
         
         <div className="flex flex-1 items-center justify-between">
           <div className="relative h-32 w-32 shrink-0">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <PieChart>
                 <Pie
                   data={REGIONAL_DATA}
