@@ -3,6 +3,8 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DetailedMetadata } from "@/components/dashboard/widgets/DetailedMetadata";
 import { EnvironmentMetrics } from "@/components/dashboard/widgets/EnvironmentMetrics";
 import { RackOverview } from "@/components/dashboard/widgets/RackOverview";
+import { SystemLogs } from "@/components/dashboard/widgets/SystemLogs";
+import { TopSKUsActivity } from "@/components/dashboard/widgets/TopSKUsActivity";
 import { DASHBOARD_LABELS } from "@/lib/constants";
 
 const { WIDGETS } = DASHBOARD_LABELS;
@@ -35,7 +37,9 @@ export default function DashboardPage() {
           </BentoCard>
 
           {/* Top SKUs Activity — mid-left single */}
-          <BentoCard title={WIDGETS.TOP_SKUS_ACTIVITY} className="col-span-1" />
+          <BentoCard title={WIDGETS.TOP_SKUS_ACTIVITY} className="col-span-1">
+            <TopSKUsActivity />
+          </BentoCard>
 
           {/* Detailed Metadata — mid-right single */}
           <BentoCard
@@ -48,8 +52,10 @@ export default function DashboardPage() {
           {/* System Logs — full-width bottom strip */}
           <BentoCard
             title={WIDGETS.SYSTEM_LOGS}
-            className="col-span-4 min-h-[160px]"
-          />
+            className="col-span-4 min-h-[160px] !bg-black/40 !border-white/[0.03]"
+          >
+            <SystemLogs />
+          </BentoCard>
         </div>
       </main>
     </div>
