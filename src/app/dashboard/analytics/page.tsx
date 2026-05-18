@@ -20,11 +20,11 @@ async function getCapacityData() {
 
     const colors = ["bg-rose-500", "bg-cyan-500", "bg-blue-500"];
 
-    return allZones.map((z, idx) => {
+    return allZones.map((z: any, idx: number) => {
       let totalCap = 0;
       let shelfCount = 0;
-      z.racks.forEach((r) =>
-        r.shelves.forEach((s) => {
+      z.racks.forEach((r: any) =>
+        r.shelves.forEach((s: any) => {
           totalCap += s.capacityPercentage;
           shelfCount++;
         })
