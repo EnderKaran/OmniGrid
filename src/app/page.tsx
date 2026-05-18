@@ -1,5 +1,6 @@
 import { BentoCard } from "@/components/dashboard/BentoCard";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { RackOverview } from "@/components/dashboard/widgets/RackOverview";
 import { DASHBOARD_LABELS } from "@/lib/constants";
 
 const { WIDGETS } = DASHBOARD_LABELS;
@@ -19,7 +20,9 @@ export default function DashboardPage() {
           <BentoCard
             title={WIDGETS.RACK_OVERVIEW}
             className="col-span-2 row-span-2 min-h-[400px]"
-          />
+          >
+            <RackOverview />
+          </BentoCard>
 
           {/* Environment Metrics — top-right wide */}
           <BentoCard
