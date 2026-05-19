@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  index,
   integer,
   pgTable,
   real,
@@ -48,7 +49,9 @@ export const zones = pgTable("zones", {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (table) => ({
+  warehouseIdIdx: index("zones_warehouse_id_idx").on(table.warehouseId),
+}));
 
 export const zonesRelations = relations(zones, ({ one, many }) => ({
   warehouse: one(warehouses, {
@@ -76,7 +79,9 @@ export const racks = pgTable("racks", {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (table) => ({
+  zoneIdIdx: index("racks_zone_id_idx").on(table.zoneId),
+}));
 
 export const racksRelations = relations(racks, ({ one, many }) => ({
   zone: one(zones, {
@@ -106,7 +111,9 @@ export const shelves = pgTable("shelves", {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (table) => ({
+  rackIdIdx: index("shelves_rack_id_idx").on(table.rackId),
+}));
 
 export const shelvesRelations = relations(shelves, ({ one, many }) => ({
   rack: one(racks, {
@@ -136,7 +143,10 @@ export const products = pgTable("products", {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (table) => ({
+  shelfIdIdx: index("products_shelf_id_idx").on(table.shelfId),
+  skuIdx: index("products_sku_idx").on(table.sku),
+}));
 
 export const productsRelations = relations(products, ({ one, many }) => ({
   shelf: one(shelves, {
@@ -167,7 +177,10 @@ export const productVariants = pgTable("product_variants", {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (table) => ({
+  productIdIdx: index("product_variants_product_id_idx").on(table.productId),
+  variantSkuIdx: index("product_variants_sku_idx").on(table.sku),
+}));
 
 export const productVariantsRelations = relations(
   productVariants,
@@ -211,5 +224,7 @@ export const systemLogs = pgTable("system_logs", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (table) => ({
+  createdAtIdx: index("system_logs_created_at_idx").on(table.createdAt),
+}));
 
