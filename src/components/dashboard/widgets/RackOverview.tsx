@@ -211,10 +211,10 @@ function ShelfCard({ shelf, isSelected, onSelect }: ShelfCardProps) {
 // RackOverview Widget
 // ──────────────────────────────────────────────
 
-export function RackOverview() {
-  const [selectedId, setSelectedId] = useState(MOCK_SHELVES[1].id);
+export function RackOverview({ shelves = [] }: { shelves?: ShelfData[] }) {
+  const [selectedId, setSelectedId] = useState(shelves[1]?.id || shelves[0]?.id);
 
-  const selectedShelf = MOCK_SHELVES.find((s) => s.id === selectedId);
+  const selectedShelf = shelves.find((s) => s.id === selectedId);
 
   return (
     <div className="flex h-full flex-col gap-5">
@@ -222,16 +222,16 @@ export function RackOverview() {
       <div className="flex items-center gap-6">
         <div className="flex flex-col">
           <span className="text-2xl font-semibold tabular-nums tracking-tight text-slate-100">
-            {MOCK_SHELVES.length}
+            {shelves.length}
           </span>
           <span className="text-[10px] uppercase tracking-[0.15em] text-slate-500">
-            Active Racks
+            Active Shelves
           </span>
         </div>
         <div className="h-8 w-px bg-white/[0.06]" />
         <div className="flex flex-col">
           <span className="text-2xl font-semibold tabular-nums tracking-tight text-slate-100">
-            {MOCK_SHELVES.reduce((sum, s) => sum + s.itemCount, 0).toLocaleString()}
+            {shelves.reduce((sum, s) => sum + s.itemCount, 0).toLocaleString()}
           </span>
           <span className="text-[10px] uppercase tracking-[0.15em] text-slate-500">
             Total Items
@@ -240,10 +240,12 @@ export function RackOverview() {
         <div className="h-8 w-px bg-white/[0.06]" />
         <div className="flex flex-col">
           <span className="text-2xl font-semibold tabular-nums tracking-tight text-emerald-400">
-            {Math.round(
-              MOCK_SHELVES.reduce((s, sh) => s + sh.capacityPercentage, 0) /
-                MOCK_SHELVES.length
-            )}
+            {shelves.length > 0
+              ? Math.round(
+                  shelves.reduce((s, sh) => s + sh.capacityPercentage, 0) /
+                    shelves.length
+                )
+              : 0}
             %
           </span>
           <span className="text-[10px] uppercase tracking-[0.15em] text-slate-500">
@@ -254,7 +256,7 @@ export function RackOverview() {
 
       {/* Mini-bento shelf grid */}
       <div className="grid flex-1 grid-cols-3 gap-3">
-        {MOCK_SHELVES.map((shelf) => (
+        {shelves.slice(0, 6).map((shelf) => (
           <ShelfCard
             key={shelf.id}
             shelf={shelf}

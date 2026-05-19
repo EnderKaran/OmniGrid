@@ -1,23 +1,26 @@
 import { Droplets, Thermometer, Weight } from "lucide-react";
 
 // ──────────────────────────────────────────────
-// Mock Data (Warehouse Wide & Avg)
-// ──────────────────────────────────────────────
-
-const MOCK_ENV = {
-  totalCapacityUsed: 78,
-  totalCapacityRaw: "1.2M",
-  totalCapacityMax: "1.5M",
-  temperature: "-3.8",
-  humidity: "42",
-  weightLoad: "840",
-};
-
-// ──────────────────────────────────────────────
 // EnvironmentMetrics Widget
 // ──────────────────────────────────────────────
 
-export function EnvironmentMetrics() {
+interface EnvironmentMetricsProps {
+  totalCapacityUsed?: number;
+  totalCapacityRaw?: string;
+  totalCapacityMax?: string;
+  temperature?: string;
+  humidity?: string;
+  weightLoad?: string;
+}
+
+export function EnvironmentMetrics({
+  totalCapacityUsed = 78,
+  totalCapacityRaw = "1.2M",
+  totalCapacityMax = "1.5M",
+  temperature = "-3.8",
+  humidity = "42",
+  weightLoad = "840",
+}: EnvironmentMetricsProps) {
   return (
     <div className="flex h-full w-full flex-col gap-6 pt-2">
       {/* 1. Asymmetric Total Capacity Progress */}
@@ -29,15 +32,15 @@ export function EnvironmentMetrics() {
             </span>
             <div className="mt-1 flex items-baseline gap-1.5">
               <span className="text-2xl font-semibold tabular-nums tracking-tight text-white">
-                {MOCK_ENV.totalCapacityRaw}
+                {totalCapacityRaw}
               </span>
               <span className="text-xs text-slate-500">
-                / {MOCK_ENV.totalCapacityMax} units
+                / {totalCapacityMax} units
               </span>
             </div>
           </div>
           <span className="text-sm font-medium tabular-nums text-emerald-400">
-            {MOCK_ENV.totalCapacityUsed}%
+            {totalCapacityUsed}%
           </span>
         </div>
 
@@ -46,12 +49,12 @@ export function EnvironmentMetrics() {
           {/* Main fill */}
           <div
             className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-600/50 to-emerald-400/80 rounded-full transition-all duration-1000 ease-out"
-            style={{ width: `${MOCK_ENV.totalCapacityUsed}%` }}
+            style={{ width: `${totalCapacityUsed}%` }}
           />
           {/* Glowing dot at the end */}
           <div
             className="absolute top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-1000 ease-out"
-            style={{ left: `calc(${MOCK_ENV.totalCapacityUsed}% - 4px)` }}
+            style={{ left: `calc(${totalCapacityUsed}% - 4px)` }}
           />
         </div>
       </div>
@@ -68,7 +71,7 @@ export function EnvironmentMetrics() {
               Temperature
             </span>
             <span className="text-sm font-semibold tabular-nums text-white">
-              {MOCK_ENV.temperature}°C
+              {temperature}°C
             </span>
           </div>
         </div>
@@ -83,7 +86,7 @@ export function EnvironmentMetrics() {
               Humidity
             </span>
             <span className="text-sm font-semibold tabular-nums text-white">
-              {MOCK_ENV.humidity}%
+              {humidity}%
             </span>
           </div>
         </div>
@@ -99,18 +102,13 @@ export function EnvironmentMetrics() {
                 Est. Floor Load
               </span>
               <span className="text-sm font-semibold tabular-nums text-white">
-                {MOCK_ENV.weightLoad} Tons
+                {weightLoad} Tons
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            <span className="text-[10px] text-emerald-400/80 uppercase tracking-widest">
-              Stable
-            </span>
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] text-slate-500">Live Load Indicator</span>
+            <span className="text-xs text-amber-400 font-medium">Optimal (72%)</span>
           </div>
         </div>
       </div>

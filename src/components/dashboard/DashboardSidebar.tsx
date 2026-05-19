@@ -4,6 +4,7 @@ import { Hexagon, LayoutDashboard, Package, ShoppingCart, BarChart3, Settings, S
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 
 const NAV_ITEMS = [
   { name: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const { user } = useUser();
 
   return (
     <aside className="flex h-screen w-full flex-col border-r border-white/5 bg-slate-950/80 px-4 py-6 backdrop-blur-md sticky top-0">
@@ -60,15 +62,27 @@ export function DashboardSidebar() {
 
       {/* User Profile */}
       <div className="mt-auto border-t border-white/5 pt-4">
-        <div className="flex items-center gap-3 px-2">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-white font-semibold">
-            AC
-          </div>
+        <Link href="/dashboard/profile" className="flex items-center gap-3 px-2 group cursor-pointer hover:opacity-90 transition-opacity">
+          {user?.imageUrl ? (
+            <img 
+              src={user.imageUrl} 
+              alt={user.fullName || "User"} 
+              className="h-9 w-9 shrink-0 rounded-full border border-teal-500/20 object-cover group-hover:border-teal-500/50 transition-colors"
+            />
+          ) : (
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-white font-semibold">
+              {user?.firstName?.charAt(0) || "U"}{user?.lastName?.charAt(0) || "P"}
+            </div>
+          )}
           <div className="flex flex-col">
-            <span className="text-sm font-medium text-slate-200">Alex Chen</span>
-            <span className="text-xs text-slate-500">Logistics Mgr.</span>
+            <span className="text-sm font-medium text-slate-200 group-hover:text-teal-400 transition-colors">
+              {user?.fullName || "Loading..."}
+            </span>
+            <span className="text-xs text-slate-500">
+              {user?.primaryEmailAddress?.emailAddress ? "Ops Manager" : "Authenticating..."}
+            </span>
           </div>
-        </div>
+        </Link>
       </div>
     </aside>
   );

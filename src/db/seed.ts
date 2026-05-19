@@ -11,6 +11,8 @@ async function main() {
 
   // Clear existing data
   console.log("Clearing existing data...");
+  await db.delete(schema.orders);
+  await db.delete(schema.systemLogs);
   await db.delete(schema.productVariants);
   await db.delete(schema.products);
   await db.delete(schema.shelves);
@@ -90,6 +92,28 @@ async function main() {
       { name: "Logic Gate Arrays (Industrial Grade)", sku: "LGA-90210-IND", productId: products[1].id, quantity: 200, price: 15.50 },
     ]);
   }
+
+  // Insert Orders
+  console.log("Inserting orders...");
+  await db.insert(schema.orders).values([
+    { id: "ORD-7821", customer: "Meridian Logistics", items: 24, total: "$12,450", status: "processing", date: "2026-05-19", destination: "Warehouse B" },
+    { id: "ORD-7820", customer: "Atlas Supply Co.", items: 8, total: "$3,200", status: "shipped", date: "2026-05-19", destination: "Dock 4" },
+    { id: "ORD-7819", customer: "Nordic Components", items: 156, total: "$48,900", status: "delivered", date: "2026-05-18", destination: "Zone A" },
+    { id: "ORD-7818", customer: "Quantum Parts Inc.", items: 42, total: "$8,750", status: "pending", date: "2026-05-18", destination: "Staging Area" },
+    { id: "ORD-7817", customer: "Prism Electronics", items: 12, total: "$6,100", status: "processing", date: "2026-05-18", destination: "Rack 14" },
+    { id: "ORD-7816", customer: "Vertex Materials", items: 200, total: "$22,000", status: "shipped", date: "2026-05-17", destination: "Cold Storage" },
+    { id: "ORD-7815", customer: "Echo Systems Ltd.", items: 5, total: "$1,850", status: "delivered", date: "2026-05-17", destination: "Zone C" },
+    { id: "ORD-7814", customer: "Helix Manufacturing", items: 67, total: "$15,300", status: "pending", date: "2026-05-16", destination: "Dock 2" },
+  ]);
+
+  // Insert System Logs
+  console.log("Inserting system logs...");
+  await db.insert(schema.systemLogs).values([
+    { timestamp: "14:32:01", type: "SUCCESS", message: "Manifest generated for outbound shipment #8492" },
+    { timestamp: "14:31:45", type: "INFO", message: "User 'j.doe' initiated zone audit" },
+    { timestamp: "14:28:12", type: "WARN", message: "Shelf SH-B-027 capacity approaching upper threshold" },
+    { timestamp: "14:15:00", type: "ERROR", message: "Sensor timeout on Zone 3 environmental monitor" },
+  ]);
 
   console.log("Seed completed successfully!");
 }

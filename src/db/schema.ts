@@ -178,3 +178,38 @@ export const productVariantsRelations = relations(
     }),
   })
 );
+
+// ──────────────────────────────────────────────
+// Orders
+// ──────────────────────────────────────────────
+
+export const orders = pgTable("orders", {
+  id: varchar("id", { length: 50 }).primaryKey(),
+  customer: varchar("customer", { length: 255 }).notNull(),
+  items: integer("items").notNull().default(0),
+  total: varchar("total", { length: 100 }).notNull(),
+  status: varchar("status", { length: 50 }).notNull().default("pending"),
+  date: varchar("date", { length: 50 }).notNull(),
+  destination: varchar("destination", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// ──────────────────────────────────────────────
+// SystemLogs
+// ──────────────────────────────────────────────
+
+export const systemLogs = pgTable("system_logs", {
+  id: serial("id").primaryKey(),
+  timestamp: varchar("timestamp", { length: 50 }).notNull(),
+  type: varchar("type", { length: 50 }).notNull(), // SUCCESS, WARN, ERROR, INFO
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+

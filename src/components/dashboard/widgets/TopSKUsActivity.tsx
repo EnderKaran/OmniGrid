@@ -1,12 +1,11 @@
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 
 // ──────────────────────────────────────────────
-// Mock Data
+// TopSKUsActivity Widget
 // ──────────────────────────────────────────────
 
-interface SkuActivity {
+export interface SkuActivity {
   id: string;
   name: string;
   sku: string;
@@ -14,39 +13,15 @@ interface SkuActivity {
   trend: "up" | "down" | "neutral";
 }
 
-const MOCK_SKUS: SkuActivity[] = [
-  {
-    id: "1",
-    name: "Frozen Peas",
-    sku: "SKU-FRZ-001A",
-    movement: 1450,
-    trend: "up",
-  },
-  {
-    id: "2",
-    name: "Logic Gate Arrays",
-    sku: "SKU-ELC-7400",
-    movement: -840,
-    trend: "down",
-  },
-  {
-    id: "3",
-    name: "Industrial Lubricant",
-    sku: "SKU-CHM-92B",
-    movement: 320,
-    trend: "neutral",
-  },
-];
+interface TopSKUsActivityProps {
+  skus?: SkuActivity[];
+}
 
-// ──────────────────────────────────────────────
-// TopSKUsActivity Widget
-// ──────────────────────────────────────────────
-
-export function TopSKUsActivity() {
+export function TopSKUsActivity({ skus = [] }: TopSKUsActivityProps) {
   return (
     <div className="flex h-full w-full flex-col pt-1">
       <ul className="flex flex-col divide-y divide-white/[0.05]">
-        {MOCK_SKUS.map((item) => (
+        {skus.map((item) => (
           <li
             key={item.id}
             className="group flex items-center justify-between py-3.5 first:pt-0 last:pb-0"
