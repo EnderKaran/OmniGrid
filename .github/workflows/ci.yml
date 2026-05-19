@@ -1,0 +1,43 @@
+name: OmniGrid WMS CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql://mock_user:mock_password@localhost:5432/mock_db
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_bW9jay1jbGVyay1rZXktOTkuY2xlcmsuYWNjb3VudHMuZGV2JA
+      CLERK_SECRET_KEY: sk_test_mock_secret_key_from_omnigrid_wms_ci_pipeline
+      NEXT_PUBLIC_PUSHER_KEY: mock_pusher_key
+      NEXT_PUBLIC_PUSHER_CLUSTER: eu
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Eslint Linting
+        run: npm run lint
+
+      - name: TypeScript Compile Check
+        run: npx tsc --noEmit
+
+      - name: Run Production Build
+        run: npm run build
+
+      - name: Run Unit Tests
+        run: npm run test
