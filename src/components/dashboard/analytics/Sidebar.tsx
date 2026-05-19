@@ -52,7 +52,7 @@ export function Sidebar() {
       {/* User Profile */}
       <div className="mt-auto border-t border-white/5 pt-4">
         <div className="flex items-center gap-3 px-2">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white font-semibold">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-white font-semibold">
             AC
           </div>
           <div className="flex flex-col">

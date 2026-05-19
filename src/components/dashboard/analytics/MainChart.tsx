@@ -26,7 +26,7 @@ export function MainChart() {
   const [filter, setFilter] = useState("24h");
 
   return (
-    <div className="flex w-full flex-col rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md shadow-lg">
+    <div className="flex w-full flex-col rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md shadow-lg transition-all duration-300 ease-out hover:border-white/10">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-white">Stock Entry vs. Exit</h3>

@@ -44,7 +44,7 @@ export function StatsCards() {
         return (
           <div
             key={idx}
-            className="flex flex-col justify-between rounded-2xl border border-white/5 bg-slate-900/40 p-5 backdrop-blur-md shadow-lg transition-all hover:bg-slate-900/60"
+            className="flex flex-col justify-between rounded-2xl border border-white/5 bg-slate-900/40 p-5 backdrop-blur-md shadow-lg transition-all duration-300 ease-out hover:bg-slate-900/60 hover:border-white/10 cursor-pointer"
           >
             <div className="flex items-start justify-between">
               <span className="text-sm font-medium text-slate-400">

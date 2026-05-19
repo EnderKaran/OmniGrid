@@ -58,7 +58,7 @@ export default function RackOverviewPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
           
           {/* Shelf A */}
-          <div className="bg-slate-900/40 border border-white/5 rounded-xl p-5 backdrop-blur-md hover:border-white/10 transition-all cursor-pointer flex flex-col h-[280px]">
+          <div className="bg-slate-900/40 border border-white/5 rounded-xl p-5 backdrop-blur-md shadow-lg hover:border-white/10 transition-all duration-300 ease-out cursor-pointer flex flex-col h-[280px]">
             <div className="flex justify-between items-start mb-4">
               <div className="w-10 h-10 rounded-lg bg-slate-800/50 flex items-center justify-center">
                 <Server className="w-5 h-5 text-slate-400" />

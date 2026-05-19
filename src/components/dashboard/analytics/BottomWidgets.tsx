@@ -25,7 +25,7 @@ export function BottomWidgets({ capacityData }: { capacityData?: CapacityData[] 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {/* Regional Distribution */}
-      <div className="flex flex-col rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md shadow-lg">
+      <div className="flex flex-col rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md shadow-lg transition-all duration-300 ease-out hover:border-white/10 hover:bg-slate-900/60">
         <h3 className="mb-6 text-sm font-semibold text-white">Regional Distribution</h3>
         
         <div className="flex flex-1 items-center justify-between">
@@ -75,7 +75,7 @@ export function BottomWidgets({ capacityData }: { capacityData?: CapacityData[] 
       </div>
 
       {/* Warehouse Capacity */}
-      <div className="flex flex-col justify-between rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md shadow-lg">
+      <div className="flex flex-col justify-between rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md shadow-lg transition-all duration-300 ease-out hover:border-white/10 hover:bg-slate-900/60">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-sm font-semibold text-white">Warehouse Capacity</h3>
           <span className="text-xs font-mono text-cyan-400">88% FULL</span>

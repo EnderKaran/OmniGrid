@@ -326,7 +326,7 @@ export default function InventoryCommandGrid() {
           {MOCK_DATA.map((item) => (
             <div 
               key={item.id} 
-              className="group bg-slate-900/40 border border-white/5 hover:border-white/10 backdrop-blur-md rounded-xl p-5 shadow-lg transition-all duration-300 flex flex-col justify-between h-[180px]"
+              className="group bg-slate-900/40 border border-white/5 hover:border-white/10 backdrop-blur-md rounded-xl p-5 shadow-lg transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between h-[180px]"
             >
               {/* Card Top */}
               <div className="flex justify-between items-start mb-4">

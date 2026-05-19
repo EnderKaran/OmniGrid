@@ -41,7 +41,7 @@ export function Features() {
           return (
             <div
               key={idx}
-              className="group flex flex-col rounded-2xl border border-white/10 bg-slate-900/50 p-6 transition-colors hover:border-cyan-500/50"
+              className="group flex flex-col rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md shadow-lg transition-all duration-300 ease-out hover:border-white/10 hover:bg-slate-900/60 cursor-pointer"
             >
               <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 transition-colors group-hover:bg-cyan-500/20">
                 <Icon className="h-6 w-6 text-cyan-400" />
