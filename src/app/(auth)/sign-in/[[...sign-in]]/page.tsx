@@ -7,7 +7,7 @@ import { Shield, Fingerprint, Key, Eye, EyeOff, AlertTriangle, IdCard } from "lu
 import Link from "next/link";
 
 export default function CustomSignIn() {
-  const { signIn } = useSignIn();
+  const { signIn, errors, fetchStatus } = useSignIn();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,33 +22,33 @@ export default function CustomSignIn() {
     setErrorMsg("");
 
     try {
-      const { error } = await signIn.password({
+      const { error } = await signIn.create({
         identifier,
         password,
       });
-      
+
       if (error) {
-        setErrorMsg(error.longMessage || "Authentication failed");
+        setErrorMsg(error.message || "Authentication failed");
         setIsAuthenticating(false);
         return;
       }
 
       if (signIn.status === "complete") {
         await signIn.finalize({
-          navigate: () => {
-            router.push("/dashboard/analytics");
+          navigate: ({ decorateUrl }) => {
+            const url = decorateUrl("/dashboard/analytics");
+            if (url.startsWith("http")) {
+              window.location.href = url;
+            } else {
+              router.push(url);
+            }
           }
         });
       } else {
-        setErrorMsg("Further authentication required.");
+        setErrorMsg("Further authentication or verification required.");
       }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setErrorMsg(err.message || "Authentication failed");
-      } else {
-        const clerkErr = err as { errors?: { longMessage?: string }[] };
-        setErrorMsg(clerkErr.errors?.[0]?.longMessage || "Authentication failed");
-      }
+    } catch (err: any) {
+      setErrorMsg(err.message || "Authentication failed");
     } finally {
       setIsAuthenticating(false);
     }
