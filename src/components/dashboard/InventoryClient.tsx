@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useTransition, useMemo } from "react";
-import { 
-  LayoutGrid, 
-  Search, 
-  User, 
+import {
+  LayoutGrid,
+  Search,
+  User,
   AlertTriangle,
   Activity,
   Plus,
@@ -52,7 +52,7 @@ const Sparkline = ({ data, status }: { data: number[], status: ItemStatus }) => 
   const max = Math.max(...data) === Math.min(...data) ? Math.max(...data) + 1 : Math.max(...data);
   const min = Math.min(...data) === max ? 0 : Math.min(...data);
   const range = max - min || 1;
-  
+
   const points = data.map((d, i) => {
     const x = (i / (data.length - 1)) * 100;
     const y = 100 - ((d - min) / range) * 100;
@@ -66,8 +66,8 @@ const Sparkline = ({ data, status }: { data: number[], status: ItemStatus }) => 
       <svg viewBox="0 -10 100 120" className="w-full h-full preserve-3d overflow-visible" preserveAspectRatio="none">
         <defs>
           <linearGradient id={`gradient-${status}`} x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity={0.3}/>
-            <stop offset="100%" stopColor={color} stopOpacity={0}/>
+            <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
         <polyline
@@ -129,7 +129,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
         activeFilter === "all" ||
         (activeFilter === "critical" && (item.status === "critical" || item.status === "warning")) ||
         (activeFilter === "moving" && item.trend === "Stable" && item.status === "normal");
-      
+
       const matchesSearch =
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -234,7 +234,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
       if (res.success && res.data) {
         setFormSuccess(true);
         triggerToast(`Ingested SKU: ${formData.sku} successfully!`, "success");
-        
+
         // Add to state dynamically
         const newProductItem: InventoryItem = {
           id: String(res.data.id),
@@ -249,7 +249,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
           shelfId: Number(formData.shelfId),
           zoneName: "Added Sector"
         };
-        
+
         setItems(prev => [newProductItem, ...prev]);
 
         // Reset
@@ -262,7 +262,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
           unit: "UNITS",
           description: ""
         });
-        
+
         setTimeout(() => {
           setShowModal(false);
           setFormSuccess(false);
@@ -275,11 +275,11 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-300 font-mono text-[11px] selection:bg-primary/30 relative">
-      
+
       {/* HEADER */}
       <header className="sticky top-0 z-40 bg-slate-950/95 border-b border-border backdrop-blur-md">
         <div className="flex items-center justify-between px-6 py-4">
-          
+
           {/* Logo & Title */}
           <div className="flex items-center gap-3">
             <Link href="/dashboard" className="p-2 border border-primary/20 bg-primary/10 hover:bg-primary/20 transition-all cursor-pointer">
@@ -287,7 +287,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
             </Link>
             <div className="flex flex-col">
               <h1 className="text-sm font-extrabold tracking-widest text-white flex items-center gap-2">
-                NEXUS_STOCK<span className="text-primary">.MATRIX</span>
+                OmniStock<span className="text-primary">.MATRIX</span>
               </h1>
               <span className="text-[9px] text-slate-500 tracking-wider">LIVE REPOSITORIES: 520 REAL RECORDS</span>
             </div>
@@ -299,9 +299,9 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 text-slate-500 group-focus-within:text-primary transition-colors" />
               </div>
-              <input 
-                type="text" 
-                placeholder="PROBING: ENTER SKU, ITEM OR ZONE LOCATION..." 
+              <input
+                type="text"
+                placeholder="PROBING: ENTER SKU, ITEM OR ZONE LOCATION..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-card/45 border border-border text-slate-200 text-xs py-2.5 pl-10 pr-40 focus:outline-none focus:border-primary/50 transition-all font-mono rounded-none"
@@ -315,7 +315,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => setShowModal(true)}
               className="flex items-center gap-2 border border-primary bg-primary/10 hover:bg-primary/20 text-white font-extrabold text-[10px] tracking-widest px-4 py-2 transition-all"
             >
@@ -338,7 +338,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
         {/* Filters and Speedometers */}
         <div className="flex flex-col md:flex-row md:items-center justify-between px-6 py-3 border-t border-border bg-card/10 gap-4">
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => setActiveFilter("all")}
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 border text-[9px] font-extrabold tracking-widest transition-all",
@@ -348,7 +348,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               <Layers className="w-3.5 h-3.5" />
               ALL ITEMS ({items.length})
             </button>
-            <button 
+            <button
               onClick={() => setActiveFilter("critical")}
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 border text-[9px] font-extrabold tracking-widest transition-all",
@@ -358,7 +358,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               <AlertTriangle className="w-3.5 h-3.5 text-primary" />
               CRITICAL/WARNING ({stats.criticalCount + stats.warningCount})
             </button>
-            <button 
+            <button
               onClick={() => setActiveFilter("moving")}
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 border text-[9px] font-extrabold tracking-widest transition-all",
@@ -389,7 +389,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
 
       {/* METRIC COMMAND CENTER CARDS */}
       <section className="p-6 max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-4">
-        
+
         {/* Metric 1 */}
         <div className="border border-border/70 bg-card/10 p-4 relative group hover:border-primary/40 transition-colors">
           <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-primary/40 group-hover:bg-primary" />
@@ -456,7 +456,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
 
         {/* Mode Toggles */}
         <div className="flex items-center gap-1.5 bg-slate-900 border border-border p-1">
-          <button 
+          <button
             onClick={() => setViewMode("table")}
             className={cn(
               "p-1.5 transition-all",
@@ -466,7 +466,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
           >
             <List className="w-4 h-4" />
           </button>
-          <button 
+          <button
             onClick={() => setViewMode("grid")}
             className={cn(
               "p-1.5 transition-all",
@@ -481,7 +481,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
 
       {/* MAIN PRODUCTS DISPLAY */}
       <main className="p-6 max-w-[1600px] mx-auto pb-24">
-        
+
         {/* COMPACT MATRIX TABLE VIEW */}
         {viewMode === "table" ? (
           <div className="w-full border border-border bg-slate-950 overflow-hidden relative">
@@ -508,8 +508,8 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                     </tr>
                   ) : (
                     filteredItems.map((item) => (
-                      <tr 
-                        key={item.id} 
+                      <tr
+                        key={item.id}
                         className={cn(
                           "hover:bg-card/15 transition-colors group",
                           item.status === "critical" ? "bg-primary/5" : ""
@@ -519,7 +519,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                         <td className="py-3 px-4 font-bold text-slate-200">
                           <div className="flex items-center gap-2">
                             <span className="font-mono tracking-tight">{item.sku}</span>
-                            <button 
+                            <button
                               onClick={() => copyToClipboard(item.sku)}
                               className="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-900 border border-transparent hover:border-border transition-all text-slate-500 hover:text-white"
                               title="Copy SKU code"
@@ -539,8 +539,8 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                           <span className={cn(
                             "px-2 py-0.5 border text-[9px] font-extrabold uppercase tracking-wider",
                             item.zoneName.includes("Cold") ? "border-sky-500/30 bg-sky-500/10 text-sky-400" :
-                            item.zoneName.includes("Hazmat") ? "border-amber-600/30 bg-amber-600/10 text-amber-500" :
-                            "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                              item.zoneName.includes("Hazmat") ? "border-amber-600/30 bg-amber-600/10 text-amber-500" :
+                                "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                           )}>
                             {item.zoneName}
                           </span>
@@ -594,7 +594,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                         {/* ACTIONS */}
                         <td className="py-3 px-4 text-right">
                           <div className="inline-flex items-center gap-1.5 bg-slate-900 border border-border p-1">
-                            <button 
+                            <button
                               disabled={isPending}
                               onClick={() => handleAdjustStock(item.id, item.shelfId, -10)}
                               className="p-1 border border-border bg-slate-950 text-slate-400 hover:text-white hover:bg-card transition-all disabled:opacity-50"
@@ -602,7 +602,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                             >
                               <span className="text-[8px] font-bold">-10</span>
                             </button>
-                            <button 
+                            <button
                               disabled={isPending}
                               onClick={() => handleAdjustStock(item.id, item.shelfId, -1)}
                               className="p-1 border border-border bg-slate-950 text-slate-400 hover:text-white hover:bg-card transition-all disabled:opacity-50"
@@ -610,10 +610,10 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                             >
                               <Minus className="w-3 h-3 text-slate-400 hover:text-white" />
                             </button>
-                            
+
                             <div className="w-px h-4 bg-border/60 mx-1" />
 
-                            <button 
+                            <button
                               disabled={isPending}
                               onClick={() => handleAdjustStock(item.id, item.shelfId, 1)}
                               className="p-1 border border-border bg-slate-950 text-slate-400 hover:text-white hover:bg-card transition-all disabled:opacity-50"
@@ -621,7 +621,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                             >
                               <Plus className="w-3 h-3 text-slate-400 hover:text-white" />
                             </button>
-                            <button 
+                            <button
                               disabled={isPending}
                               onClick={() => handleAdjustStock(item.id, item.shelfId, 10)}
                               className="p-1 border border-border bg-slate-950 text-slate-400 hover:text-white hover:bg-card transition-all disabled:opacity-50"
@@ -646,8 +646,8 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               </div>
             ) : (
               filteredItems.map((item) => (
-                <div 
-                  key={item.id} 
+                <div
+                  key={item.id}
                   className="group bg-card/25 border border-border p-5 transition-all duration-300 flex flex-col justify-between h-[180px] hover:border-primary/45 relative"
                 >
                   <div className="absolute top-2 right-2 flex items-center gap-1.5">
@@ -695,14 +695,14 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                     </div>
 
                     <div className="flex items-center gap-1 bg-slate-900 border border-border/80 px-1 py-0.5">
-                      <button 
+                      <button
                         disabled={isPending}
                         onClick={() => handleAdjustStock(item.id, item.shelfId, -1)}
                         className="p-1 border border-border bg-slate-950 text-slate-400 hover:text-white disabled:opacity-50"
                       >
                         <Minus className="w-2.5 h-2.5" />
                       </button>
-                      <button 
+                      <button
                         disabled={isPending}
                         onClick={() => handleAdjustStock(item.id, item.shelfId, 1)}
                         className="p-1 border border-border bg-slate-950 text-slate-400 hover:text-white disabled:opacity-50"
@@ -721,7 +721,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
       {/* TOAST SYSTEM */}
       <div className="fixed bottom-12 right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none">
         {toasts.map((t) => (
-          <div 
+          <div
             key={t.id}
             className={cn(
               "px-4 py-3 border text-white font-mono text-[10px] tracking-widest uppercase flex items-center justify-between gap-3 shadow-2xl animate-fade-in pointer-events-auto",
@@ -741,13 +741,13 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
           <div className="w-full max-w-lg border border-border bg-slate-950 p-6 relative font-mono text-[11px]">
             <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-primary" />
-            
+
             <div className="flex items-center justify-between border-b border-border pb-4 mb-4">
               <h2 className="text-xs font-black tracking-widest text-white uppercase flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-primary animate-pulse" />
                 SKU_INGESTION_MODULE
               </h2>
-              <button 
+              <button
                 onClick={() => setShowModal(false)}
                 className="text-slate-500 hover:text-white border border-border/60 hover:border-border bg-card/25 px-2 py-0.5 text-[9px] font-bold"
               >
@@ -773,8 +773,8 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               {/* Product name */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-slate-500 font-bold uppercase tracking-wider">Product Name / Label *</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   placeholder="e.g. Optik Sensör Seti"
                   value={formData.name}
@@ -787,8 +787,8 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-slate-500 font-bold uppercase tracking-wider">SKU Code *</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
                     placeholder="e.g. SEN-OPT-1025"
                     value={formData.sku}
@@ -798,8 +798,8 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-slate-500 font-bold uppercase tracking-wider">Barcode (Optional)</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     placeholder="e.g. BAR-SEN-OPT-1025"
                     value={formData.barcode}
                     onChange={(e) => setFormData(prev => ({ ...prev, barcode: e.target.value }))}
@@ -812,8 +812,8 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-slate-500 font-bold uppercase tracking-wider">Initial Stock Level *</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     required
                     min={0}
                     value={formData.quantity}
@@ -823,7 +823,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-slate-500 font-bold uppercase tracking-wider">Intake Unit *</label>
-                  <select 
+                  <select
                     value={formData.unit}
                     onChange={(e) => setFormData(prev => ({ ...prev, unit: e.target.value }))}
                     className="bg-card/45 border border-border text-slate-200 text-xs py-2 px-3 focus:outline-none focus:border-primary/50 transition-all font-mono rounded-none"
@@ -837,7 +837,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               {/* Shelf selector (dropdown) */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-slate-500 font-bold uppercase tracking-wider">Physical Shelf Assignment *</label>
-                <select 
+                <select
                   value={formData.shelfId}
                   onChange={(e) => setFormData(prev => ({ ...prev, shelfId: Number(e.target.value) }))}
                   className="bg-card/45 border border-border text-slate-200 text-xs py-2 px-3 focus:outline-none focus:border-primary/50 transition-all font-mono rounded-none text-white font-bold"
@@ -853,7 +853,7 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               {/* Description */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-slate-500 font-bold uppercase tracking-wider">Technical Description</label>
-                <textarea 
+                <textarea
                   placeholder="Enter details about this stock variant..."
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
@@ -862,14 +862,14 @@ export function InventoryClient({ items: initialItems, shelves }: { items: Inven
               </div>
 
               <div className="flex justify-end gap-3 mt-2 border-t border-border/50 pt-4">
-                <button 
+                <button
                   type="button"
                   onClick={() => setShowModal(false)}
                   className="border border-border/80 text-slate-400 bg-card/25 px-4 py-2 hover:text-white"
                 >
                   CANCEL
                 </button>
-                <button 
+                <button
                   type="submit"
                   disabled={isPending}
                   className="border border-primary bg-primary/10 hover:bg-primary/20 text-white font-extrabold px-6 py-2 transition-all disabled:opacity-50"
