@@ -25,10 +25,11 @@ export async function simulatePickOrder(
       timestamp: new Date().toISOString(),
     });
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : "Failed to trigger mock pick";
     return {
       success: false,
-      error: error.message || "Failed to trigger mock pick",
+      error: msg,
     };
   }
 }

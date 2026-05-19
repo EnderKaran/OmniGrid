@@ -3,14 +3,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { 
   Hexagon, 
-  Settings, 
   Wifi, 
   BatteryMedium, 
   Maximize2, 
   PackageCheck, 
   CheckCircle2, 
   XCircle, 
-  FileEdit, 
   AlertTriangle, 
   Check,
   Camera,
@@ -18,7 +16,6 @@ import {
   VolumeX,
   RefreshCw,
   Barcode,
-  Layers,
   History,
   AlertCircle
 } from "lucide-react";
@@ -80,7 +77,6 @@ export default function ScannerPage() {
   
   // Real camera video stream state
   const [cameraActive, setCameraActive] = useState<boolean>(false);
-  const [cameraPermission, setCameraPermission] = useState<"pending" | "granted" | "denied">("pending");
   const [activeDeviceId, setActiveDeviceId] = useState<string>("");
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [targetLocking, setTargetLocking] = useState<boolean>(false);
@@ -105,9 +101,9 @@ export default function ScannerPage() {
   const playBeep = (type: "success" | "error" | "confirm") => {
     if (!soundEnabled) return;
     try {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
+      const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtxClass) return;
+      const ctx = new AudioCtxClass();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
@@ -162,7 +158,6 @@ export default function ScannerPage() {
     }
 
     try {
-      setCameraPermission("pending");
       const constraints: MediaStreamConstraints = {
         video: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: "environment" }
       };
@@ -174,7 +169,6 @@ export default function ScannerPage() {
         videoRef.current.srcObject = stream;
       }
       
-      setCameraPermission("granted");
       setCameraActive(true);
 
       // Get lists of video inputs
@@ -186,7 +180,6 @@ export default function ScannerPage() {
       }
     } catch (err) {
       console.warn("WebRTC camera stream error", err);
-      setCameraPermission("denied");
       setCameraActive(false);
     }
   };
@@ -202,8 +195,13 @@ export default function ScannerPage() {
 
   // Trigger camera start on load
   useEffect(() => {
-    startCamera();
-    return () => stopCamera();
+    const timer = setTimeout(() => {
+      startCamera();
+    }, 50);
+    return () => {
+      clearTimeout(timer);
+      stopCamera();
+    };
   }, []);
 
   // Trigger barcode scan simulator action
@@ -239,7 +237,6 @@ export default function ScannerPage() {
     if (!tempBarcodeVal.trim()) return;
 
     // Search matches or fallback to custom error
-    const formattedCode = `PROD-${tempBarcodeVal.toUpperCase()}`;
     const matchedKey = Object.keys(MOCK_BARCODES).find(k => k.includes(tempBarcodeVal.toUpperCase()));
     
     if (matchedKey) {
@@ -411,7 +408,7 @@ export default function ScannerPage() {
               <div className={`absolute bottom-0 right-0 w-10 h-10 border-b-4 border-r-4 rounded-br-lg transition-colors ${targetLocking ? "border-red-500" : "border-amber-500"}`} />
               
               <div className="flex justify-between items-start text-[8px] font-mono text-amber-500/40 select-none">
-                <span>SYS.REC // 004</span>
+                <span>SYS.REC | 004</span>
                 <span>AUTO_ZOOM</span>
               </div>
 
@@ -429,8 +426,8 @@ export default function ScannerPage() {
               </div>
 
               <div className="flex justify-between items-end text-[8px] font-mono text-amber-500/40 select-none">
-                <span>R-AXIS // LOCK_OK</span>
-                <span>TEMP // SAFE</span>
+                <span>R-AXIS | LOCK_OK</span>
+                <span>TEMP | SAFE</span>
               </div>
 
               {/* Laser line inside viewfinder */}
@@ -638,7 +635,7 @@ export default function ScannerPage() {
                   >
                     <div className="flex flex-col">
                       <span className="font-mono text-xs font-bold text-zinc-200">{log.id}</span>
-                      <span className="text-[8px] font-mono text-zinc-500">Raf: {log.shelfId} // Saat: {log.timestamp}</span>
+                      <span className="text-[8px] font-mono text-zinc-500">Raf: {log.shelfId} | Saat: {log.timestamp}</span>
                     </div>
 
                     <div className="flex items-center gap-1">
@@ -699,7 +696,7 @@ export default function ScannerPage() {
               className="group relative flex h-14 w-full items-center justify-center gap-2 border border-amber-500/20 bg-amber-500/10 font-bold text-amber-500 transition-all hover:bg-amber-500 hover:text-black hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]"
             >
               <Check className="h-5 w-5" />
-              <span className="text-sm font-black tracking-widest uppercase">İŞLEMİ ONAYLA // CONFIRM</span>
+              <span className="text-sm font-black tracking-widest uppercase">İŞLEMİ ONAYLA | CONFIRM</span>
             </button>
           </div>
 

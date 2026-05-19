@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { getPusherClient } from "@/lib/pusher";
 import { simulatePickOrder } from "@/actions/iot";
@@ -80,29 +80,34 @@ export function RackOverview({
     );
 
     if (target) {
-      setPulsingShelfId(target.id);
-      setIotLogs((prev) => [
-        {
-          id: Math.random().toString(),
-          shelfName: target.label,
-          timestamp: new Date().toLocaleTimeString(),
-        },
-        ...prev.slice(0, 4),
-      ]);
+      // Defer state updates to avoid synchronous setState inside effect warnings
+      const updateTimeout = setTimeout(() => {
+        setPulsingShelfId(target.id);
+        setIotLogs((prev) => [
+          {
+            id: Math.random().toString(),
+            shelfName: target.label,
+            timestamp: new Date().toLocaleTimeString(),
+          },
+          ...prev.slice(0, 4),
+        ]);
+
+        if (onClearPickSignal) {
+          onClearPickSignal();
+        }
+      }, 0);
 
       // Auto-clear pulsing highlight after 5 seconds
-      const timeout = setTimeout(() => {
+      const pulseTimeout = setTimeout(() => {
         setPulsingShelfId((current) =>
           current === target.id ? null : current
         );
       }, 5000);
 
-      // Trigger callback to clear the signal from the parent
-      if (onClearPickSignal) {
-        onClearPickSignal();
-      }
-
-      return () => clearTimeout(timeout);
+      return () => {
+        clearTimeout(updateTimeout);
+        clearTimeout(pulseTimeout);
+      };
     }
   }, [activePickSignal, shelves, onClearPickSignal]);
 
@@ -173,8 +178,9 @@ export function RackOverview({
       } else {
         setSimulationStatus("Trigger failed: " + res.error);
       }
-    } catch (err: any) {
-      setSimulationStatus("Error: " + err.message);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error occurred";
+      setSimulationStatus("Error: " + msg);
     } finally {
       setIsSimulating(false);
     }

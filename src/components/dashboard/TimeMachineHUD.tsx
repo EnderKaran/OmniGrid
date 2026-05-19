@@ -1,8 +1,8 @@
 "use client";
-
-import { useEffect, useRef, useState } from "react";
+ 
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX, ShieldAlert, Zap, Tv } from "lucide-react";
-
+ 
 interface TimeMachineHUDProps {
   timeOffset: number; // in hours (0, 1, 4, 12, 24, 48)
   setTimeOffset: (hours: number) => void;
@@ -11,7 +11,7 @@ interface TimeMachineHUDProps {
   liveInterrupt: { shelfName: string; timestamp: string } | null;
   onClearInterrupt: () => void;
 }
-
+ 
 const STEPS = [
   { value: 0, label: "LIVE" },
   { value: 1, label: "-1 HR" },
@@ -20,7 +20,7 @@ const STEPS = [
   { value: 24, label: "-24 HR" },
   { value: 48, label: "-48 HR" },
 ];
-
+ 
 export function TimeMachineHUD({
   timeOffset,
   setTimeOffset,
@@ -32,26 +32,26 @@ export function TimeMachineHUD({
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [showCRT, setShowCRT] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
-
+ 
   // Play synthetic retro-computer click sound using Web Audio API
-  const playSynthSound = (frequency = 600, duration = 0.06, type: "sine" | "square" = "sine") => {
+  const playSynthSound = useCallback((frequency = 600, duration = 0.06, type: "sine" | "square" = "sine") => {
     if (!audioEnabled || typeof window === "undefined") return;
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
-
+ 
       if (!audioContextRef.current) {
         audioContextRef.current = new AudioCtx();
       }
-
+ 
       const ctx = audioContextRef.current;
       if (ctx.state === "suspended") {
         ctx.resume();
       }
-
+ 
       const osc = ctx.createOscillator();
       const gainNode = ctx.createGain();
-
+ 
       osc.type = type;
       osc.frequency.setValueAtTime(frequency, ctx.currentTime);
       
@@ -60,19 +60,19 @@ export function TimeMachineHUD({
       } else {
         osc.frequency.setValueAtTime(frequency / 2, ctx.currentTime + duration * 0.5);
       }
-
+ 
       gainNode.gain.setValueAtTime(0.05, ctx.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-
+ 
       osc.connect(gainNode);
       gainNode.connect(ctx.destination);
-
+ 
       osc.start();
       osc.stop(ctx.currentTime + duration);
-    } catch (e) {
+    } catch {
       // fail-safe
     }
-  };
+  }, [audioEnabled]);
 
   // Trigger sound on offset change
   useEffect(() => {
@@ -81,12 +81,12 @@ export function TimeMachineHUD({
     } else {
       playSynthSound(400 + (timeOffset * 5), 0.08, "sine");
     }
-  }, [timeOffset]);
-
+  }, [timeOffset, playSynthSound]);
+ 
   // Loop playback effect when playing is active
   useEffect(() => {
     if (!isPlaying) return;
-
+ 
     const interval = setInterval(() => {
       // Get index of current step
       const currentIndex = STEPS.findIndex((s) => s.value === timeOffset);
@@ -97,9 +97,9 @@ export function TimeMachineHUD({
       setTimeOffset(STEPS[nextIndex].value);
       playSynthSound(700, 0.05, "square");
     }, 2500);
-
+ 
     return () => clearInterval(interval);
-  }, [isPlaying, timeOffset, setTimeOffset]);
+  }, [isPlaying, timeOffset, setTimeOffset, playSynthSound]);
 
   const togglePlayback = () => {
     setIsPlaying(!isPlaying);
@@ -182,10 +182,14 @@ export function TimeMachineHUD({
               if (newState) {
                 // Initialize context instantly to unlock browser audio
                 try {
-                  const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-                  audioContextRef.current = new AudioCtx();
-                  audioContextRef.current.resume();
-                } catch (_) {}
+                  const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+                  if (AudioCtx) {
+                    audioContextRef.current = new AudioCtx();
+                    audioContextRef.current.resume();
+                  }
+                } catch {
+                  // fail-safe
+                }
               }
               // Quick confirmation beep
               setTimeout(() => {
@@ -227,6 +231,7 @@ export function TimeMachineHUD({
           <div className="relative w-full px-1">
             <input
               type="range"
+              aria-label="Timeline History Slider"
               min="0"
               max="48"
               step="1"

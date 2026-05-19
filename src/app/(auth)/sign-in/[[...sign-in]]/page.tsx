@@ -48,8 +48,9 @@ export default function CustomSignIn() {
       } else {
         setErrorMsg("Further authentication or verification required. Status: " + signIn.status);
       }
-    } catch (err: any) {
-      setErrorMsg(err.message || "Authentication failed");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Authentication failed";
+      setErrorMsg(msg);
     } finally {
       setIsAuthenticating(false);
     }

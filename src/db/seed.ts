@@ -39,9 +39,12 @@ async function main() {
 
   // Insert Racks & Shelves
   console.log("Inserting racks and shelves...");
-  const racks = [];
+  const racks: (typeof schema.racks.$inferSelect)[] = [];
+  const allShelves: (typeof schema.shelves.$inferSelect)[] = [];
+  
+  // Let's create more racks per zone to accommodate 500+ products
   for (const zone of zones) {
-    for (let r = 1; r <= 2; r++) {
+    for (let r = 1; r <= 4; r++) {
       const [rack] = await db.insert(schema.racks).values({
         name: `Rack ${zone.name.charAt(5)}-${r}`,
         zoneId: zone.id,
@@ -50,75 +53,140 @@ async function main() {
       }).returning();
       racks.push(rack);
 
-      for (let s = 1; s <= 3; s++) {
-        // Varying capacity and temperature based on zone
+      for (let s = 1; s <= 5; s++) {
         let temp = 20;
         let cap = Math.floor(Math.random() * 60) + 20;
         if (zone.name.includes("Cold")) {
           temp = -4 + Math.random() * 2;
-          cap = Math.floor(Math.random() * 40) + 50; // Cold is more full
+          cap = Math.floor(Math.random() * 40) + 50;
         } else if (zone.name.includes("Hazmat")) {
           cap = Math.floor(Math.random() * 30) + 10;
         }
 
-        await db.insert(schema.shelves).values({
+        const [shelf] = await db.insert(schema.shelves).values({
           name: `Shelf ${rack.name.split(" ")[1]}-L${s}`,
           rackId: rack.id,
           level: s,
           capacityPercentage: cap,
           temperature: temp,
           weight: Math.floor(Math.random() * 500) + 100,
-        });
+        }).returning();
+        allShelves.push(shelf);
       }
     }
   }
 
-  // Insert Products
-  console.log("Inserting products...");
-  const allShelves = await db.select().from(schema.shelves);
+  // Insert 500+ Products!
+  console.log("Generating 520 high-performance products...");
+  const productValues = [];
   
-  if (allShelves.length > 0) {
-    const products = await db.insert(schema.products).values([
-      { name: "Frozen Peas 500g", sku: "FP-500-01", quantity: 124, shelfId: allShelves[0].id },
-      { name: "Logic Gate Arrays", sku: "LGA-90210", quantity: 850, shelfId: allShelves[1].id },
-      { name: "Industrial Solvents", sku: "ISO-XX1", quantity: 45, shelfId: allShelves[allShelves.length - 1].id },
-      { name: "Standard Pallet Wraps", sku: "PW-STD-00", quantity: 420, shelfId: allShelves[2].id },
-    ]).returning();
+  const productTemplates = [
+    { name: "Optik Sensör Seti", skuPrefix: "SEN-OPT", category: "Electronics" },
+    { name: "Sıcaklık Transduseri", skuPrefix: "SEN-TMP", category: "Electronics" },
+    { name: "Nem Kalibratör Probu", skuPrefix: "SEN-HUM", category: "Electronics" },
+    { name: "Lityum İyon Batarya Hücresi", skuPrefix: "BAT-LIO", category: "Electronics" },
+    { name: "Kondansatör Paketi 10uF", skuPrefix: "CAP-10U", category: "Electronics" },
+    { name: "Akıllı RFID Etiket Şeridi", skuPrefix: "TAG-RFI", category: "Electronics" },
+    { name: "Mikrodenetleyici Anakart", skuPrefix: "MCU-BRD", category: "Electronics" },
+    { name: "Lazer Diyot Modülü", skuPrefix: "LAS-DIO", category: "Electronics" },
+    { name: "Akselerometre Çipi", skuPrefix: "ACC-CHP", category: "Electronics" },
+    { name: "Gerilim Regülatörü", skuPrefix: "VOL-REG", category: "Electronics" },
+    
+    { name: "Endüstriyel Solvent Solüsyonu", skuPrefix: "HAZ-SOL", category: "Hazmat" },
+    { name: "Saf Etanol Yakıtı 5L", skuPrefix: "HAZ-ETH", category: "Hazmat" },
+    { name: "Reaktif Epoksi Yapıştırıcı", skuPrefix: "HAZ-EPO", category: "Hazmat" },
+    { name: "Kurşun Asit Akümülatörü", skuPrefix: "HAZ-LAA", category: "Hazmat" },
+    { name: "Argon Gaz Tüpü 20L", skuPrefix: "HAZ-ARG", category: "Hazmat" },
+    { name: "Kostik Soda Flakeleri", skuPrefix: "HAZ-SOD", category: "Hazmat" },
+    { name: "Hidroklorik Asit Bidonu", skuPrefix: "HAZ-HCL", category: "Hazmat" },
+    { name: "Basınçlı Nitrojen Tankı", skuPrefix: "HAZ-NIT", category: "Hazmat" },
+    
+    { name: "Dondurulmuş Organik Bezelye 500g", skuPrefix: "CLD-PEA", category: "Cold" },
+    { name: "Kriyojenik Medikal Aşı Tüpü", skuPrefix: "CLD-VAC", category: "Cold" },
+    { name: "Termal Jel Buz Aküsü", skuPrefix: "CLD-ICE", category: "Cold" },
+    { name: "Dondurulmuş Atlantik Somonu", skuPrefix: "CLD-SAL", category: "Cold" },
+    { name: "Dondurulmuş Yaban Mersini", skuPrefix: "CLD-BLU", category: "Cold" },
+    { name: "Hassas Enzim Sıvı Kiti", skuPrefix: "CLD-ENZ", category: "Cold" },
+    { name: "Sıvı Azot Soğutma Kabı", skuPrefix: "CLD-LN2", category: "Cold" },
+    
+    { name: "Ağır Hizmet Ahşap Palet", skuPrefix: "PKG-PLT", category: "General" },
+    { name: "Polietilen Patpat Naylon 100m", skuPrefix: "PKG-BUB", category: "General" },
+    { name: "Streç Film Sarım Rulosu", skuPrefix: "PKG-STR", category: "General" },
+    { name: "Çelik Güçlendirilmiş Raf Profili", skuPrefix: "PKG-STL", category: "General" },
+    { name: "Koli Bantlama Makinesi", skuPrefix: "PKG-TAP", category: "General" },
+    { name: "Oluklu Mukavva Koli (Büyük)", skuPrefix: "PKG-BOX", category: "General" },
+    { name: "Kargo Çemberleme Şeridi 500m", skuPrefix: "PKG-BAN", category: "General" }
+  ];
 
-    // Insert Variants
-    console.log("Inserting variants...");
-    await db.insert(schema.productVariants).values([
-      { name: "Frozen Peas 500g (Organic)", sku: "FP-500-01-ORG", productId: products[0].id, quantity: 50, price: 4.99 },
-      { name: "Logic Gate Arrays (Industrial Grade)", sku: "LGA-90210-IND", productId: products[1].id, quantity: 200, price: 15.50 },
-    ]);
+  for (let i = 1; i <= 520; i++) {
+    const template = productTemplates[i % productTemplates.length];
+    
+    // Distribute based on category to correct shelf zone
+    let targetShelf = allShelves[i % allShelves.length];
+    if (template.category === "Cold") {
+      const coldShelves = allShelves.filter(s => {
+        const rack = racks.find(r => r.id === s.rackId);
+        const zone = zones.find(z => z.id === rack?.zoneId);
+        return zone?.name.includes("Cold");
+      });
+      if (coldShelves.length > 0) targetShelf = coldShelves[i % coldShelves.length];
+    } else if (template.category === "Hazmat") {
+      const hazmatShelves = allShelves.filter(s => {
+        const rack = racks.find(r => r.id === s.rackId);
+        const zone = zones.find(z => z.id === rack?.zoneId);
+        return zone?.name.includes("Hazmat");
+      });
+      if (hazmatShelves.length > 0) targetShelf = hazmatShelves[i % hazmatShelves.length];
+    } else {
+      const generalShelves = allShelves.filter(s => {
+        const rack = racks.find(r => r.id === s.rackId);
+        const zone = zones.find(z => z.id === rack?.zoneId);
+        return zone?.name.includes("General");
+      });
+      if (generalShelves.length > 0) targetShelf = generalShelves[i % generalShelves.length];
+    }
+
+    const serialNum = String(1000 + i);
+    const sku = `${template.skuPrefix}-${serialNum}`;
+    const barcode = `PROD-${sku}`;
+    
+    productValues.push({
+      name: `${template.name} #${serialNum}`,
+      description: `${template.name} serisi, endüstriyel kalite standartlarına uygun lojistik ürün. Seri numarası ${serialNum}.`,
+      sku: sku,
+      barcode: barcode,
+      quantity: Math.floor(Math.random() * 450) + 10,
+      shelfId: targetShelf.id
+    });
   }
 
-  // Insert Orders
+  // Insert in batches of 100 for safety and speed
+  console.log("Saving products to Neon database...");
+  for (let i = 0; i < productValues.length; i += 100) {
+    const batch = productValues.slice(i, i + 100);
+    await db.insert(schema.products).values(batch);
+  }
+  console.log(`Successfully loaded ${productValues.length} products!`);
+
+  // Insert some orders
   console.log("Inserting orders...");
   await db.insert(schema.orders).values([
     { id: "ORD-7821", customer: "Meridian Logistics", items: 24, total: "$12,450", status: "processing", date: "2026-05-19", destination: "Warehouse B" },
     { id: "ORD-7820", customer: "Atlas Supply Co.", items: 8, total: "$3,200", status: "shipped", date: "2026-05-19", destination: "Dock 4" },
-    { id: "ORD-7819", customer: "Nordic Components", items: 156, total: "$48,900", status: "delivered", date: "2026-05-18", destination: "Zone A" },
-    { id: "ORD-7818", customer: "Quantum Parts Inc.", items: 42, total: "$8,750", status: "pending", date: "2026-05-18", destination: "Staging Area" },
-    { id: "ORD-7817", customer: "Prism Electronics", items: 12, total: "$6,100", status: "processing", date: "2026-05-18", destination: "Rack 14" },
-    { id: "ORD-7816", customer: "Vertex Materials", items: 200, total: "$22,000", status: "shipped", date: "2026-05-17", destination: "Cold Storage" },
-    { id: "ORD-7815", customer: "Echo Systems Ltd.", items: 5, total: "$1,850", status: "delivered", date: "2026-05-17", destination: "Zone C" },
-    { id: "ORD-7814", customer: "Helix Manufacturing", items: 67, total: "$15,300", status: "pending", date: "2026-05-16", destination: "Dock 2" },
+    { id: "ORD-7819", customer: "Apex Industrial Corp.", items: 120, total: "$84,200", status: "pending", date: "2026-05-19", destination: "Zone C Gate 2" }
   ]);
 
-  // Insert System Logs
+  // Insert some initial system logs
   console.log("Inserting system logs...");
   await db.insert(schema.systemLogs).values([
-    { timestamp: "14:32:01", type: "SUCCESS", message: "Manifest generated for outbound shipment #8492" },
-    { timestamp: "14:31:45", type: "INFO", message: "User 'j.doe' initiated zone audit" },
-    { timestamp: "14:28:12", type: "WARN", message: "Shelf SH-B-027 capacity approaching upper threshold" },
-    { timestamp: "14:15:00", type: "ERROR", message: "Sensor timeout on Zone 3 environmental monitor" },
+    { timestamp: "13:21:40", type: "INFO", message: "OmniGrid WMS Real-Time Stock Database Sync initialized." },
+    { timestamp: "13:22:05", type: "SUCCESS", message: "Neon PostgreSQL database seed loaded successfully: 500+ records updated." }
   ]);
 
-  console.log("Seed completed successfully!");
+  console.log("Seed complete!");
 }
 
-main().catch((e) => {
-  console.error("Seed failed:", e);
+main().catch((err) => {
+  console.error("Seed failed:", err);
   process.exit(1);
 });

@@ -10,8 +10,7 @@ import {
   Box, 
   Clock, 
   Lock, 
-  ClipboardCheck,
-  Terminal
+  ClipboardCheck
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -73,10 +72,11 @@ export function RackOverviewClient({ rack, allRacks }: { rack: Rack; allRacks: {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 border-b border-border pb-6">
           <div>
             <h1 className="text-2xl font-extrabold text-white tracking-tight uppercase">{rack.name} Overview</h1>
-            <p className="text-slate-500 mt-1 uppercase text-[10px] tracking-widest">{rack.zone.name} // ROW_{rack.row}</p>
+            <p className="text-slate-500 mt-1 uppercase text-[10px] tracking-widest">{rack.zone.name}{" // "}ROW_{rack.row}</p>
           </div>
           <div className="flex items-center gap-3">
             <select 
+              aria-label="Select Rack"
               onChange={(e) => window.location.href = `/dashboard/rack/${e.target.value}`}
               value={rack.id}
               className="bg-card/45 border border-border text-slate-200 text-xs py-2 px-3 focus:outline-none focus:border-primary/50 uppercase rounded-none"

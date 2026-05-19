@@ -18,11 +18,23 @@ export default async function InventoryCommandGrid() {
     }
   });
 
+  const dbShelves = await db.query.shelves.findMany({
+    with: {
+      rack: {
+        with: {
+          zone: true
+        }
+      }
+    }
+  });
+
   const inventoryData: InventoryItem[] = dbProducts.map((p) => {
     let locationCode = "GEN-01";
+    let zoneName = "General";
     if (p.shelf?.rack?.zone) {
       const zoneLetter = p.shelf.rack.zone.name.includes("Cold") ? "A" : (p.shelf.rack.zone.name.includes("Hazmat") ? "C" : "B");
       locationCode = `${zoneLetter}-0${p.shelf.rack.row}-0${p.shelf.level}`;
+      zoneName = p.shelf.rack.zone.name;
     }
 
     const isLowStock = p.quantity < 100;
@@ -39,8 +51,15 @@ export default async function InventoryCommandGrid() {
       trend: p.quantity < 50 ? "REORDER" : "Stable",
       status,
       chartData: [40, 30, p.quantity > 100 ? 50 : 20, p.quantity > 200 ? 60 : 30, p.quantity, p.quantity, p.quantity],
+      shelfId: p.shelfId,
+      zoneName,
     };
   });
 
-  return <InventoryClient items={inventoryData} />;
+  const shelvesList = dbShelves.map((s) => ({
+    id: s.id,
+    name: `${s.name} (${s.rack.zone.name})`,
+  }));
+
+  return <InventoryClient items={inventoryData} shelves={shelvesList} />;
 }

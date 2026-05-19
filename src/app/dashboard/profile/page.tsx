@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import React from "react";
 import { useUser, SignOutButton } from "@clerk/nextjs";
@@ -15,7 +16,6 @@ import {
   Hexagon
 } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 
 export default function UserProfilePage() {
   const { isLoaded, isSignedIn, user } = useUser();

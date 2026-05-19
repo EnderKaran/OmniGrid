@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { Terminal, LayoutDashboard, Package, ShoppingCart, BarChart3, Settings, Scan } from "lucide-react";
 import Link from "next/link";
