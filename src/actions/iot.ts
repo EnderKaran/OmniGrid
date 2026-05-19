@@ -19,11 +19,13 @@ export async function simulatePickOrder(
 
   try {
     const pusher = getPusherServer();
-    await pusher.trigger("warehouse-global", "iot:pick-triggered", {
-      shelfId,
-      shelfName,
-      timestamp: new Date().toISOString(),
-    });
+    if (pusher) {
+      await pusher.trigger("warehouse-global", "iot:pick-triggered", {
+        shelfId,
+        shelfName,
+        timestamp: new Date().toISOString(),
+      });
+    }
     return { success: true };
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Failed to trigger mock pick";

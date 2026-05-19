@@ -24,14 +24,24 @@ export const PUSHER_EVENTS = {
 
 let pusherServerInstance: PusherServer | null = null;
 
-export function getPusherServer(): PusherServer {
+export function getPusherServer(): PusherServer | null {
   if (pusherServerInstance) return pusherServerInstance;
 
+  const appId = process.env.PUSHER_APP_ID;
+  const key = process.env.PUSHER_KEY;
+  const secret = process.env.PUSHER_SECRET;
+  const cluster = process.env.PUSHER_CLUSTER;
+
+  if (!appId || !key || !secret || !cluster) {
+    console.warn("Pusher server-side credentials are not configured. Real-time telemetry broadcast is disabled.");
+    return null;
+  }
+
   pusherServerInstance = new PusherServer({
-    appId: process.env.PUSHER_APP_ID!,
-    key: process.env.PUSHER_KEY!,
-    secret: process.env.PUSHER_SECRET!,
-    cluster: process.env.PUSHER_CLUSTER!,
+    appId,
+    key,
+    secret,
+    cluster,
     useTLS: true,
   });
 

@@ -90,17 +90,19 @@ export async function updateStock(
     /* --- Emerald Pulse: broadcast via Pusher --- */
     const pusher = getPusherServer();
 
-    await pusher.trigger(PUSHER_CHANNELS.INVENTORY, PUSHER_EVENTS.STOCK_CHANGED, {
-      productId,
-      productName: product.name,
-      shelfId,
-      previousQuantity: product.quantity,
-      newQuantity,
-      quantityChange,
-      reason,
-      triggeredBy: userId,
-      timestamp: new Date().toISOString(),
-    });
+    if (pusher) {
+      await pusher.trigger(PUSHER_CHANNELS.INVENTORY, PUSHER_EVENTS.STOCK_CHANGED, {
+        productId,
+        productName: product.name,
+        shelfId,
+        previousQuantity: product.quantity,
+        newQuantity,
+        quantityChange,
+        reason,
+        triggeredBy: userId,
+        timestamp: new Date().toISOString(),
+      });
+    }
 
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/inventory");
@@ -143,17 +145,19 @@ export async function createProduct(
 
     /* --- Emerald Pulse: broadcast --- */
     const pusher = getPusherServer();
-    await pusher.trigger(PUSHER_CHANNELS.INVENTORY, PUSHER_EVENTS.STOCK_CHANGED, {
-      productId: newProduct.id,
-      productName: newProduct.name,
-      shelfId,
-      previousQuantity: 0,
-      newQuantity: quantity,
-      quantityChange: quantity,
-      reason: "Initial Stock Ingest",
-      triggeredBy: userId,
-      timestamp: new Date().toISOString(),
-    });
+    if (pusher) {
+      await pusher.trigger(PUSHER_CHANNELS.INVENTORY, PUSHER_EVENTS.STOCK_CHANGED, {
+        productId: newProduct.id,
+        productName: newProduct.name,
+        shelfId,
+        previousQuantity: 0,
+        newQuantity: quantity,
+        quantityChange: quantity,
+        reason: "Initial Stock Ingest",
+        triggeredBy: userId,
+        timestamp: new Date().toISOString(),
+      });
+    }
 
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/inventory");
@@ -196,17 +200,19 @@ export async function updateShelfSensor(
     /* --- Emerald Pulse: broadcast sensor data --- */
     const pusher = getPusherServer();
 
-    await pusher.trigger(
-      PUSHER_CHANNELS.SHELF(shelfId),
-      PUSHER_EVENTS.SENSOR_DATA,
-      {
-        shelfId,
-        capacityPercentage,
-        temperature,
-        weight,
-        updatedAt: new Date().toISOString(),
-      }
-    );
+    if (pusher) {
+      await pusher.trigger(
+        PUSHER_CHANNELS.SHELF(shelfId),
+        PUSHER_EVENTS.SENSOR_DATA,
+        {
+          shelfId,
+          capacityPercentage,
+          temperature,
+          weight,
+          updatedAt: new Date().toISOString(),
+        }
+      );
+    }
 
     return { success: true };
   } catch {
