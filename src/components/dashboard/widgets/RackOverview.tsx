@@ -44,7 +44,15 @@ function getCapacityConfig(pct: number) {
   };
 }
 
-export function RackOverview({ shelves = [] }: { shelves?: ShelfData[] }) {
+export function RackOverview({
+  shelves = [],
+  activePickSignal = null,
+  onClearPickSignal,
+}: {
+  shelves?: ShelfData[];
+  activePickSignal?: { shelfId: number; shelfName: string } | null;
+  onClearPickSignal?: () => void;
+}) {
   const [activeTab, setActiveTab] = useState<"telemetry" | "iot">("telemetry");
   const [selectedShelfId, setSelectedShelfId] = useState<string | null>(
     shelves[0]?.id || null
@@ -60,10 +68,49 @@ export function RackOverview({ shelves = [] }: { shelves?: ShelfData[] }) {
 
   const selectedShelf = shelves.find((s) => s.id === selectedShelfId);
 
+  // Listen for parent passed pick signals (such as live Pusher events from DashboardClient)
+  useEffect(() => {
+    if (!activePickSignal) return;
+
+    const data = activePickSignal;
+    const target = shelves.find(
+      (s) =>
+        s.label.toLowerCase() === data.shelfName.toLowerCase() ||
+        s.id.endsWith(String(data.shelfId))
+    );
+
+    if (target) {
+      setPulsingShelfId(target.id);
+      setIotLogs((prev) => [
+        {
+          id: Math.random().toString(),
+          shelfName: target.label,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+        ...prev.slice(0, 4),
+      ]);
+
+      // Auto-clear pulsing highlight after 5 seconds
+      const timeout = setTimeout(() => {
+        setPulsingShelfId((current) =>
+          current === target.id ? null : current
+        );
+      }, 5000);
+
+      // Trigger callback to clear the signal from the parent
+      if (onClearPickSignal) {
+        onClearPickSignal();
+      }
+
+      return () => clearTimeout(timeout);
+    }
+  }, [activePickSignal, shelves, onClearPickSignal]);
+
   // Subscribe to Pusher channel for real-time Pick-to-Light guidance simulation
   useEffect(() => {
     try {
       const pusher = getPusherClient();
+      if (!pusher) return;
       const channel = pusher.subscribe("warehouse-global");
 
       channel.bind(
@@ -99,7 +146,7 @@ export function RackOverview({ shelves = [] }: { shelves?: ShelfData[] }) {
       );
 
       return () => {
-        channel.unbind_all();
+        channel.unbind("iot:pick-triggered");
         pusher.unsubscribe("warehouse-global");
       };
     } catch (err) {
