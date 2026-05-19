@@ -1,6 +1,6 @@
 export function CTA() {
   return (
-    <section className="relative mx-auto max-w-4xl px-6 py-24 text-center md:py-32">
+    <section id="cta" className="relative mx-auto max-w-4xl px-6 py-24 text-center md:py-32">
       <h2 className="mb-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
         Ready to upgrade your logistics?
       </h2>

@@ -1,5 +1,4 @@
 import { Bell } from "lucide-react";
-import { Sidebar } from "@/components/dashboard/analytics/Sidebar";
 import { StatsCards } from "@/components/dashboard/analytics/StatsCards";
 import { MainChart } from "@/components/dashboard/analytics/MainChart";
 import { BottomWidgets } from "@/components/dashboard/analytics/BottomWidgets";
@@ -47,13 +46,8 @@ export default async function AnalyticsDashboardPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-950 text-slate-200">
-      {/* 20% Sidebar */}
-      <div className="w-[20%] hidden lg:block shrink-0">
-        <Sidebar />
-      </div>
-
-      {/* 55% Main Content */}
-      <main className="flex-1 lg:w-[55%] flex flex-col px-8 py-6">
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col px-8 py-6">
         {/* Top Header */}
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
@@ -90,7 +84,7 @@ export default async function AnalyticsDashboardPage() {
         </div>
       </main>
 
-      {/* 25% System Logs */}
+      {/* System Logs */}
       <div className="w-[25%] hidden xl:block shrink-0">
         <SystemLogsPanel />
       </div>

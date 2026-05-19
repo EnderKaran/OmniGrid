@@ -15,15 +15,30 @@ export function Navbar() {
 
         {/* Links */}
         <nav className="hidden items-center gap-8 md:flex">
-          {["Solutions", "Hardware", "Integration", "Company"].map((item) => (
-            <Link
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
-            >
-              {item}
-            </Link>
-          ))}
+          <Link
+            href="#solutions"
+            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+          >
+            Solutions
+          </Link>
+          <Link
+            href="/dashboard/inventory"
+            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+          >
+            Inventory
+          </Link>
+          <Link
+            href="/dashboard/analytics"
+            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+          >
+            Analytics
+          </Link>
+          <Link
+            href="#cta"
+            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+          >
+            Contact
+          </Link>
         </nav>
 
         {/* Auth Buttons */}
