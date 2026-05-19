@@ -44,15 +44,18 @@ export function getPusherServer(): PusherServer {
 
 let pusherClientInstance: PusherClient | null = null;
 
-export function getPusherClient(): PusherClient {
+export function getPusherClient(): PusherClient | null {
   if (pusherClientInstance) return pusherClientInstance;
 
-  pusherClientInstance = new PusherClient(
-    process.env.NEXT_PUBLIC_PUSHER_KEY!,
-    {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    }
-  );
+  const key = process.env.NEXT_PUBLIC_PUSHER_KEY;
+  const cluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
+
+  if (!key || !cluster) {
+    console.warn("Pusher client-side keys are not configured. Real-time telemetry is disabled.");
+    return null;
+  }
+
+  pusherClientInstance = new PusherClient(key, { cluster });
 
   return pusherClientInstance;
 }

@@ -373,7 +373,7 @@ export function RackOverview({
                           >
                             {/* 3D Wireframe Container (Invisible/translucent backdrop for mouse targeting) */}
                             <polygon
-                              points={`${cx - boxW / 2},${cy - boxH - boxD / 2} ${cx + boxW / 2},${cy - boxH - boxD / 2} ${cx + boxW / 2},${cy} ${cx - boxW / 2},${cy} Z`}
+                              points={`${cx - boxW / 2},${cy - boxH - boxD / 2} ${cx + boxW / 2},${cy - boxH - boxD / 2} ${cx + boxW / 2},${cy} ${cx - boxW / 2},${cy}`}
                               fill="transparent"
                               className="pointer-events-auto"
                             />
