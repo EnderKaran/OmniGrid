@@ -1,4 +1,4 @@
-import { Hexagon, LayoutDashboard, Package, ShoppingCart, BarChart3, Settings } from "lucide-react";
+import { Hexagon, LayoutDashboard, Package, ShoppingCart, BarChart3, Settings, Scan } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { name: "Orders", icon: ShoppingCart, href: "/dashboard/orders" },
   { name: "Analytics", icon: BarChart3, href: "/dashboard/analytics", active: true },
   { name: "Settings", icon: Settings, href: "/dashboard/settings" },
+  { name: "Scanner", icon: Scan, href: "/scanner" },
 ];
 
 export function Sidebar() {

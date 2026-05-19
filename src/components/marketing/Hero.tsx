@@ -1,4 +1,5 @@
 import { ArrowRight, FileText, Zap, Box, ActivitySquare } from "lucide-react";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -28,10 +29,10 @@ export function Hero() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <button className="group flex h-12 items-center gap-2 rounded-full bg-cyan-500 px-6 font-semibold text-slate-950 transition-all hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+          <Link href="/dashboard/analytics" className="group flex h-12 items-center gap-2 rounded-full bg-cyan-500 px-6 font-semibold text-slate-950 transition-all hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
             Initialize Demo
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </button>
+          </Link>
           <button className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10">
             <FileText className="h-4 w-4" />
             Documentation
