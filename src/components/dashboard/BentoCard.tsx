@@ -24,7 +24,7 @@ export function BentoCard({ title, className, children }: BentoCardProps) {
         <div className="mt-4 flex flex-1 items-center justify-center">
           {children ?? (
             <div className="flex flex-col items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-white/[0.04] border border-white/[0.06]" />
+              <div className="h-10 w-10 bg-white/[0.02] border border-border" />
               <span className="text-sm text-slate-500/60">—</span>
             </div>
           )}

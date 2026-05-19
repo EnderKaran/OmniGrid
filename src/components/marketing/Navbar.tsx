@@ -1,59 +1,61 @@
 import Link from "next/link";
-import { Hexagon } from "lucide-react";
+import { Terminal } from "lucide-react";
 
 export function Navbar() {
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-white/[0.05] bg-slate-950/50 backdrop-blur-md">
+    <header className="fixed top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Hexagon className="h-6 w-6 text-cyan-400" fill="currentColor" fillOpacity={0.2} />
-          <span className="text-lg font-bold tracking-tight text-white">
-            Omni<span className="text-slate-300">Grid</span>
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="flex h-8 w-8 items-center justify-center border border-primary bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-slate-950">
+            <Terminal className="h-4 w-4" />
+          </div>
+          <span className="font-mono text-sm font-bold uppercase tracking-[0.2em] text-white">
+            Omni<span className="text-primary">Grid</span>
           </span>
-        </div>
+        </Link>
 
         {/* Links */}
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-8 md:flex font-mono text-[11px] uppercase tracking-widest">
           <Link
             href="#solutions"
-            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+            className="text-slate-400 transition-all hover:text-primary"
           >
-            Solutions
+            [ Solutions ]
           </Link>
           <Link
             href="/dashboard/inventory"
-            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+            className="text-slate-400 transition-all hover:text-primary"
           >
-            Inventory
+            [ Inventory ]
           </Link>
           <Link
             href="/dashboard/analytics"
-            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+            className="text-slate-400 transition-all hover:text-primary"
           >
-            Analytics
+            [ Analytics ]
           </Link>
           <Link
             href="#cta"
-            className="text-sm font-medium text-slate-400 transition-colors hover:text-cyan-400"
+            className="text-slate-400 transition-all hover:text-primary"
           >
-            Contact
+            [ Contact ]
           </Link>
         </nav>
 
         {/* Auth Buttons */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-widest">
           <Link
             href="/sign-in"
-            className="text-sm font-medium text-slate-300 transition-colors hover:text-white"
+            className="text-slate-300 transition-colors hover:text-white"
           >
             Log In
           </Link>
           <Link
-            href="/sign-up"
-            className="rounded-full bg-cyan-500 px-5 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400"
+            href="/sign-in"
+            className="border border-primary bg-primary/10 px-5 py-2 font-bold text-primary transition-all hover:bg-primary hover:text-slate-950"
           >
-            Get Started
+            Initialize
           </Link>
         </div>
       </div>

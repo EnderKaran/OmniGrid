@@ -24,10 +24,10 @@ export const DASHBOARD_LABELS = {
 // ──────────────────────────────────────────────
 
 export const CARD_STYLES = {
-  BASE: "rounded-2xl border border-white/[0.04] bg-white/[0.02] backdrop-blur-md shadow-lg shadow-black/20 transition-all duration-300 ease-out",
-  HOVER: "hover:-translate-y-0.5 hover:border-white/[0.08] hover:bg-white/[0.04] hover:shadow-xl hover:shadow-black/30",
+  BASE: "rounded-none border border-border bg-card/30 shadow-lg shadow-black/30 transition-all duration-300 ease-out relative",
+  HOVER: "hover:border-primary/40 hover:bg-card/60 hover:shadow-2xl hover:shadow-black/60",
   HEADER:
-    "text-[13px] font-medium uppercase tracking-[0.15em] text-slate-400/80",
+    "text-[12px] font-semibold uppercase tracking-[0.25em] text-primary/95 font-mono flex items-center gap-2 border-b border-border/40 pb-2 mb-2",
   GLOW_ACCENT:
-    "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent before:pointer-events-none",
+    "before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-primary/30 before:to-transparent before:pointer-events-none",
 } as const;

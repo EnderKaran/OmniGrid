@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-plus-jakarta-sans);
+  --font-mono: var(--font-space-grotesk);
+  --font-heading: var(--font-space-grotesk);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,13 +39,13 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
 }
 
 :root {
@@ -72,7 +72,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  --radius: 0px;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -84,43 +84,43 @@
 }
 
 .dark {
-  /* Midnight Professional Theme — Deep navy/charcoal instead of pure black */
-  --background: oklch(0.13 0.015 260);
-  --foreground: oklch(0.96 0.005 250);
-  --card: oklch(0.17 0.018 258);
-  --card-foreground: oklch(0.96 0.005 250);
-  --popover: oklch(0.17 0.018 258);
-  --popover-foreground: oklch(0.96 0.005 250);
-  --primary: oklch(0.92 0.006 250);
-  --primary-foreground: oklch(0.17 0.018 258);
-  --secondary: oklch(0.22 0.02 256);
-  --secondary-foreground: oklch(0.96 0.005 250);
-  --muted: oklch(0.22 0.02 256);
-  --muted-foreground: oklch(0.65 0.01 255);
-  --accent: oklch(0.22 0.02 256);
-  --accent-foreground: oklch(0.96 0.005 250);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.30 0.02 258 / 60%);
-  --input: oklch(0.30 0.02 258 / 70%);
-  --ring: oklch(0.50 0.015 255);
-  --chart-1: oklch(0.65 0.18 250);
-  --chart-2: oklch(0.55 0.15 200);
-  --chart-3: oklch(0.50 0.12 170);
-  --chart-4: oklch(0.45 0.10 280);
-  --chart-5: oklch(0.40 0.08 310);
-  --sidebar: oklch(0.11 0.018 262);
-  --sidebar-foreground: oklch(0.96 0.005 250);
-  --sidebar-primary: oklch(0.55 0.2 260);
-  --sidebar-primary-foreground: oklch(0.96 0.005 250);
-  --sidebar-accent: oklch(0.20 0.022 258);
-  --sidebar-accent-foreground: oklch(0.96 0.005 250);
-  --sidebar-border: oklch(0.30 0.02 258 / 50%);
-  --sidebar-ring: oklch(0.50 0.015 255);
+  /* Brutalist HUD Luxury OKLCH Theme — Obsidian base, Gold and Emerald accents */
+  --background: oklch(0.11 0.01 45);
+  --foreground: oklch(0.95 0.005 60);
+  --card: oklch(0.13 0.015 48);
+  --card-foreground: oklch(0.95 0.005 60);
+  --popover: oklch(0.13 0.015 48);
+  --popover-foreground: oklch(0.95 0.005 60);
+  --primary: oklch(0.80 0.08 75); /* Antique Gold/Bronze */
+  --primary-foreground: oklch(0.11 0.01 45);
+  --secondary: oklch(0.16 0.02 50);
+  --secondary-foreground: oklch(0.95 0.005 60);
+  --muted: oklch(0.16 0.02 50);
+  --muted-foreground: oklch(0.65 0.03 55);
+  --accent: oklch(0.82 0.16 142); /* Precision Telemetry Emerald */
+  --accent-foreground: oklch(0.11 0.01 45);
+  --destructive: oklch(0.65 0.18 25);
+  --border: oklch(0.24 0.02 45 / 0.7);
+  --input: oklch(0.24 0.02 45 / 0.8);
+  --ring: oklch(0.80 0.08 75 / 0.4);
+  --chart-1: oklch(0.80 0.08 75);
+  --chart-2: oklch(0.82 0.16 142);
+  --chart-3: oklch(0.60 0.12 180);
+  --chart-4: oklch(0.50 0.10 220);
+  --chart-5: oklch(0.40 0.08 300);
+  --sidebar: oklch(0.10 0.01 42);
+  --sidebar-foreground: oklch(0.95 0.005 60);
+  --sidebar-primary: oklch(0.80 0.08 75);
+  --sidebar-primary-foreground: oklch(0.11 0.01 45);
+  --sidebar-accent: oklch(0.14 0.022 48);
+  --sidebar-accent-foreground: oklch(0.95 0.005 60);
+  --sidebar-border: oklch(0.20 0.02 45 / 0.6);
+  --sidebar-ring: oklch(0.80 0.08 75 / 0.4);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 rounded-none!;
   }
   body {
     @apply bg-background text-foreground;
@@ -128,4 +128,41 @@
   html {
     @apply font-sans;
   }
+}
+
+/* Premium HUD Custom Styling */
+.hud-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-scanline::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 20;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+.tech-grid {
+  background-image: 
+    linear-gradient(to right, rgba(204, 172, 102, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(204, 172, 102, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@keyframes progress-scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.scan-indicator {
+  animation: progress-scan 4s linear infinite;
 }

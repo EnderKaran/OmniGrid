@@ -108,8 +108,8 @@ export default async function DashboardPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <DashboardHeader />
 
-      {/* Subtle top-edge glow */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-emerald-500/[0.03] to-transparent" />
+      {/* Stark HUD Scan overlay line */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/45 to-transparent" />
 
       {/* ─── Bento Grid ─── */}
       <main className="relative flex-1 px-6 pb-8 pt-2">
@@ -117,7 +117,7 @@ export default async function DashboardPage() {
           {/* Rack Overview — large hero card, top-left */}
           <BentoCard
             title={WIDGETS.RACK_OVERVIEW}
-            className="col-span-2 row-span-2 min-h-[400px]"
+            className="col-span-4 lg:col-span-2 row-span-2 min-h-[400px]"
           >
             <RackOverview shelves={shelvesData} />
           </BentoCard>
@@ -125,20 +125,20 @@ export default async function DashboardPage() {
           {/* Environment Metrics — top-right wide */}
           <BentoCard
             title={WIDGETS.ENVIRONMENT_METRICS}
-            className="col-span-2"
+            className="col-span-4 lg:col-span-2"
           >
             <EnvironmentMetrics {...envMetrics} />
           </BentoCard>
 
           {/* Top SKUs Activity — mid-left single */}
-          <BentoCard title={WIDGETS.TOP_SKUS_ACTIVITY} className="col-span-1">
+          <BentoCard title={WIDGETS.TOP_SKUS_ACTIVITY} className="col-span-4 md:col-span-2 lg:col-span-1">
             <TopSKUsActivity skus={skusData} />
           </BentoCard>
 
           {/* Detailed Metadata — mid-right single */}
           <BentoCard
             title={WIDGETS.DETAILED_METADATA}
-            className="col-span-1"
+            className="col-span-4 md:col-span-2 lg:col-span-1"
           >
             <DetailedMetadata {...metadataData} />
           </BentoCard>
@@ -146,7 +146,7 @@ export default async function DashboardPage() {
           {/* System Logs — full-width bottom strip */}
           <BentoCard
             title={WIDGETS.SYSTEM_LOGS}
-            className="col-span-4 min-h-[160px] !bg-black/40 !border-white/[0.03]"
+            className="col-span-4 min-h-[160px] bg-card/10 border-border/80"
           >
             <SystemLogs logs={logsData} />
           </BentoCard>
