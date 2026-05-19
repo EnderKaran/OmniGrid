@@ -18,7 +18,7 @@ export function Sidebar() {
         <div className="flex items-center gap-2">
           <Hexagon className="h-6 w-6 text-cyan-400" fill="currentColor" fillOpacity={0.2} />
           <span className="text-xl font-bold tracking-tight text-white">
-            Nexus <span className="text-slate-300">WMS</span>
+            OmniGrid <span className="text-slate-300">WMS</span>
           </span>
         </div>
         <div className="mt-1 text-[10px] font-mono tracking-widest text-slate-500">
