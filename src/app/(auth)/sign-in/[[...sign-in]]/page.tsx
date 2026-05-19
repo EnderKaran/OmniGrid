@@ -7,7 +7,7 @@ import { Shield, Fingerprint, Key, Eye, EyeOff, AlertTriangle, IdCard } from "lu
 import Link from "next/link";
 
 export default function CustomSignIn() {
-  const { signIn, errors, fetchStatus } = useSignIn();
+  const { signIn } = useSignIn();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -42,9 +42,13 @@ export default function CustomSignIn() {
       } else {
         setErrorMsg("Further authentication required.");
       }
-    } catch (err: any) {
-      console.error(err);
-      setErrorMsg(err.errors?.[0]?.longMessage || "Authentication failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMsg(err.message || "Authentication failed");
+      } else {
+        const clerkErr = err as { errors?: { longMessage?: string }[] };
+        setErrorMsg(clerkErr.errors?.[0]?.longMessage || "Authentication failed");
+      }
     } finally {
       setIsAuthenticating(false);
     }

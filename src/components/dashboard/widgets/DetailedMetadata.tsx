@@ -1,7 +1,5 @@
 import { Activity, Clock, HardDrive, Key } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-
 // ──────────────────────────────────────────────
 // Mock Data (Shelf B Context)
 // ──────────────────────────────────────────────

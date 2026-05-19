@@ -20,11 +20,11 @@ async function getCapacityData() {
 
     const colors = ["bg-rose-500", "bg-cyan-500", "bg-blue-500"];
 
-    return allZones.map((z: any, idx: number) => {
+    return allZones.map((z: { name: string; racks: { shelves: { capacityPercentage: number }[] }[] }, idx: number) => {
       let totalCap = 0;
       let shelfCount = 0;
-      z.racks.forEach((r: any) =>
-        r.shelves.forEach((s: any) => {
+      z.racks.forEach((r) =>
+        r.shelves.forEach((s) => {
           totalCap += s.capacityPercentage;
           shelfCount++;
         })
@@ -36,8 +36,8 @@ async function getCapacityData() {
         color: colors[idx % colors.length],
       };
     });
-  } catch (error) {
-    console.error("Failed to fetch capacity data from Neon:", error);
+  } catch {
+    // Silent error in production UI
     return undefined;
   }
 }
